@@ -28,10 +28,11 @@
    To render, drag onto OmniGraffle or (assuming graphviz installed):
    `dot -Tsvg out-dot > out.svg`"
   [out-dot src-path]
-  (let [declarations (ctnf/find-ns-decls-in-dir (io/file src-path))
-        edges        (mapcat ns-decl->edges declarations)
-        dg           (apply loom.graph/digraph edges)]
+  (let [clj-decls  (ctnf/find-ns-decls-in-dir (io/file src-path) ctnf/clj)
+        cljs-decls (ctnf/find-ns-decls-in-dir (io/file src-path) ctnf/cljs)
+        edges      (mapcat ns-decl->edges (concat clj-decls cljs-decls))
+        dg         (apply loom.graph/digraph edges)]
     (loom.io/dot dg out-dot)))
 
 (comment
-  (-main "grid.dot" "/Users/rgm/Projects/opengb/grid/systems/grid/src/"))
+  (-main "grid2.dot" "/Users/rgm/Projects/opengb/grid/systems/grid/src/frontend"))
